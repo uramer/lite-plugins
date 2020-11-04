@@ -13,6 +13,13 @@ local numpad_map = {
   ["keypad ."] = "delete",
 }
 
+local fix_numpad_map = {
+  ["keypad /"] = "/",
+  ["keypad *"] = "*",
+  ["keypad -"] = "-",
+  ["keypad +"] = "+",
+}
+
 local numlock = false
 
 local press = keymap.on_key_pressed
@@ -22,8 +29,9 @@ keymap.on_key_pressed = function(k)
     numlock = not numlock
     return true
   end
-  if not numlock then
+  if not numlock or keymap.modkeys["shift"] then
     k = numpad_map[k] or k
   end
+  k = fix_numpad_map[k] or k
   return press(k)
 end
